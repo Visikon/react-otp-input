@@ -2,6 +2,7 @@ import React from 'react';
 import OTPInput from '../../src';
 
 function App() {
+  const [miniConsole, setMiniConsole] = React.useState('');
   const [{ otp, numInputs, separator, minLength, maxLength, placeholder, inputType }, setConfig] = React.useState({
     otp: '',
     numInputs: 4,
@@ -40,6 +41,19 @@ function App() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     alert(otp);
+  };
+
+  const logToConsoles = (message: string) => {
+    console.log(message);
+    setMiniConsole((prevState) => prevState + '\n' + message);
+  };
+
+  const handleFocus = (index: number) => {
+    logToConsoles(`OTP #${index} Received Focus`);
+  };
+
+  const handleBlur = () => {
+    logToConsoles(`OTP Lost Focus`);
   };
 
   return (
@@ -97,6 +111,7 @@ function App() {
             <option value="password">password</option>
           </select>
         </div>
+        <pre>{miniConsole}</pre>
         <div className="side-bar__segment side-bar__segment--bottom">
           <a href="https://github.com/devfolioco/react-otp-input">Documentation and Source</a>
         </div>
@@ -107,8 +122,8 @@ function App() {
             <p>Enter verification code</p>
             <div className="margin-top--small">
               <OTPInput
-                onFocus={() => console.log('OTP gained focus!')}
-                onBlur={() => console.log('OTP lost Focus!')}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
                 inputStyle="inputStyle"
                 numInputs={numInputs}
                 onChange={handleOTPChange}
