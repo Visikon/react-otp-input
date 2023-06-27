@@ -126,6 +126,14 @@ const OTPInput = ({
 
     if (!inputRefs.current.includes(event.relatedTarget as HTMLInputElement)) {
       onFocus?.(index);
+
+      // Only retarget input if the selected input is empty
+      if (!event.target.value) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        focusInput(value.length);
+      }
     }
   };
 
