@@ -66,6 +66,7 @@ const OTPInput = ({
   containerStyle,
   inputStyle,
 }: OTPInputProps) => {
+  const previousValue = React.useRef(value);
   const [activeInput, setActiveInput] = React.useState(0);
   const inputRefs = React.useRef<Array<HTMLInputElement | null>>([]);
 
@@ -102,8 +103,14 @@ const OTPInput = ({
   };
 
   React.useEffect(() => {
-    focusInput(value.length);
-  }, [value.length]);
+    const previousLength = previousValue.current.length;
+
+    if (value.length > previousLength) {
+      focusInput(value.length);
+    }
+
+    previousValue.current = value;
+  }, [value]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
