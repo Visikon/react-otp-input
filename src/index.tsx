@@ -101,12 +101,15 @@ const OTPInput = ({
     return isTypeValid && value.trim().length === 1;
   };
 
+  React.useEffect(() => {
+    focusInput(value.length);
+  }, [value.length]);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
 
     if (isInputValueValid(value)) {
       changeCodeAtFocus(value);
-      focusInput(activeInput + 1);
     } else {
       const { nativeEvent } = event;
       // @ts-expect-error - This was added previosly to handle and edge case
@@ -115,7 +118,6 @@ const OTPInput = ({
       if (nativeEvent.data === null && nativeEvent.inputType === 'deleteContentBackward') {
         event.preventDefault();
         changeCodeAtFocus('');
-        focusInput(activeInput - 1);
       }
     }
   };
